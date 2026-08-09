@@ -1,0 +1,20 @@
+manage_sources = true
+manage_teams = false
+prune = false
+dry_run = false
+
+[[sources]]
+name = "Railway ClickHouse"
+source_type = "clickhouse"
+meta_ts_field = "timestamp"
+meta_severity_field = "severity_text"
+description = "Private ClickHouse log store provisioned by the Railway template"
+ttl_days = 30
+secret_ref = "LOGCHEF_CLICKHOUSE_PASSWORD"
+
+[sources.connection]
+host = "clickhouse.railway.internal:9000"
+username = "logchef"
+database = "default"
+table_name = "logs"
+tls_enable = false

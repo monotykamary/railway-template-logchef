@@ -1,0 +1,10 @@
+{
+  "name": "railway-template-logchef",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/static.mjs",
+    "smoke": "sh scripts/smoke.sh"
+  }
+}

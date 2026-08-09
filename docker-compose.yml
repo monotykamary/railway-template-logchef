@@ -1,0 +1,68 @@
+services:
+  clickhouse:
+    build:
+      context: ./clickhouse
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: logchef
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?set CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "127.0.0.1:${CLICKHOUSE_HTTP_PORT:-18123}:8123"
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    networks:
+      default:
+        aliases:
+          - clickhouse.railway.internal
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --user logchef --password \"$$CLICKHOUSE_PASSWORD\" --query 'SELECT 1' >/dev/null"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+      start_period: 10s
+
+  logchef:
+    build:
+      context: ./logchef
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    environment:
+      PORT: "8125"
+      LOGCHEF_SERVER__PORT: "8125"
+      LOGCHEF_SERVER__SECURE_COOKIE: "false"
+      LOGCHEF_SERVER__FRONTEND_URL: http://localhost:${LOGCHEF_HTTP_PORT:-18125}
+      LOGCHEF_AUTH__LOCAL__ENABLED: "true"
+      LOGCHEF_AUTH__LOCAL__ADMIN_EMAIL: ${LOGCHEF_ADMIN_EMAIL:?set LOGCHEF_ADMIN_EMAIL}
+      LOGCHEF_AUTH__LOCAL__ADMIN_PASSWORD: ${LOGCHEF_ADMIN_PASSWORD:?set LOGCHEF_ADMIN_PASSWORD}
+      LOGCHEF_AUTH__ADMIN_EMAILS: ${LOGCHEF_ADMIN_EMAIL:?set LOGCHEF_ADMIN_EMAIL}
+      LOGCHEF_AUTH__API_TOKEN_SECRET: ${LOGCHEF_API_TOKEN_SECRET:?set LOGCHEF_API_TOKEN_SECRET}
+      LOGCHEF_CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:?set CLICKHOUSE_PASSWORD}
+      LOGCHEF_CLICKHOUSE_HEALTH_URL: http://clickhouse.railway.internal:8123/ping
+    ports:
+      - "127.0.0.1:${LOGCHEF_HTTP_PORT:-18125}:8125"
+    volumes:
+      - logchef-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8125/api/v1/health"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+      start_period: 10s
+
+  smoke:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+    profiles: ["test"]
+    environment:
+      LOGCHEF_URL: http://logchef:8125
+      LOGCHEF_ADMIN_EMAIL: ${LOGCHEF_ADMIN_EMAIL:?set LOGCHEF_ADMIN_EMAIL}
+      LOGCHEF_ADMIN_PASSWORD: ${LOGCHEF_ADMIN_PASSWORD:?set LOGCHEF_ADMIN_PASSWORD}
+      LOGCHEF_QUERY_MARKER: ${LOGCHEF_QUERY_MARKER:?set LOGCHEF_QUERY_MARKER}
+    command: ["node", "scripts/api-smoke.mjs"]
+
+volumes:
+  clickhouse-data:
+  logchef-data:

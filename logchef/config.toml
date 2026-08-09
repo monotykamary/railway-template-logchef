@@ -1,0 +1,27 @@
+[server]
+port = 8125
+host = "0.0.0.0"
+http_server_timeout = "15m"
+secure_cookie = true
+frontend_url = ""
+
+[database]
+driver = "sqlite"
+
+[sqlite]
+path = "/data/logchef.db"
+
+[auth]
+admin_emails = []
+api_token_secret = ""
+
+[auth.local]
+enabled = true
+admin_email = ""
+admin_password = ""
+
+[logging]
+level = "info"
+
+[provisioning]
+file = "/etc/logchef/provisioning.toml"
