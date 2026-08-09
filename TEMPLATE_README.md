@@ -37,7 +37,7 @@ The first administrator is created idempotently from `LOGCHEF_AUTH__LOCAL__ADMIN
 
 The Logchef wrapper replaces the release image's development-oriented configuration with a minimal production configuration, enables local authentication, stores SQLite under `/data`, waits for authenticated ClickHouse readiness, and declaratively provisions the private datasource. The ClickHouse wrapper uses the current `26.3` LTS image and initializes a MergeTree log table with a 30-day TTL and common OpenTelemetry-style fields. Both base images are pinned by tag and digest.
 
-Railway exposes only Logchef on port `8125`. ClickHouse remains private on HTTP port `8123` and native port `9000`. Generated service references keep the ClickHouse password synchronized without serializing a real secret. Both volumes receive daily backups, and both services use explicit health checks and restart policies.
+Railway exposes only Logchef on port `8125`. ClickHouse remains private on HTTP port `8123` and native port `9000`. Generated service references keep the ClickHouse password synchronized without serializing a real secret. Both volumes receive daily backups, and both services use explicit health checks and restart policies. Live validation observed approximately 1.7 GB of idle ClickHouse memory and 20 MB for Logchef; allow at least 2 GB before adding a production log workload.
 
 Logchef does not ingest logs itself. Deploy a collector in the same project and target `clickhouse.railway.internal`, or connect Logchef to another ClickHouse or VictoriaLogs source after deployment. Public UDP is unavailable on Railway, so use TCP or HTTP ingestion for cloud collectors.
 

@@ -14,7 +14,7 @@ The repository-level `LICENSE` preserves the GNU AGPLv3 terms. Logchef and its m
 
 ## ClickHouse
 
-The template uses the official ClickHouse Server `26.3.17.110` LTS container without copying ClickHouse source code.
+The template uses the official ClickHouse Server `26.3.17.110` LTS container and includes its official Docker documentation logo as service artwork.
 
 - Source: https://github.com/ClickHouse/ClickHouse
 - Release: https://github.com/ClickHouse/ClickHouse/releases/tag/v26.3.17.110-lts

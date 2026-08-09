@@ -50,7 +50,7 @@ The Logchef and ClickHouse volumes are independent; Railway does not share a vol
 ## Important limitations
 
 - The template deploys one Logchef replica because SQLite is the default metadata store. Use PostgreSQL and review Logchef's alert-manager caveat before attempting multiple replicas.
-- ClickHouse is single-node and not highly available. Size memory and storage for the workload; ClickHouse will dominate resource use.
+- ClickHouse is single-node and not highly available. The validated idle stack used about 1.7 GB for ClickHouse and 20 MB for Logchef, so budget at least 2 GB of memory before adding a real log workload.
 - No ingestion endpoint is exposed publicly. Prefer a collector in the same Railway project. If public ingestion is necessary, secure it explicitly rather than exposing an unauthenticated ClickHouse service.
 - Railway has no public UDP support. UDP-only syslog inputs require a separate gateway or a TCP/HTTP collector path.
 - The datasource depends on the service name `clickhouse`; renaming that service breaks `clickhouse.railway.internal` until the provisioning file is updated.
