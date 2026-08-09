@@ -56,6 +56,7 @@ await readFile(path.join(root, "assets/logchef-icon-v202.png"));
 await readFile(path.join(root, "assets/clickhouse-icon-v263.png"));
 
 const readme = await read("README.md");
+assert.ok(readme.includes("https://railway.com/deploy/logchef?referralCode=ZqgrJ0"));
 for (const marker of ["Logchef v2.0.2", "ClickHouse 26.3.17.110 LTS", "Important limitations", "Post-deploy setup"]) {
   assert.ok(readme.includes(marker), `README is missing ${marker}`);
 }

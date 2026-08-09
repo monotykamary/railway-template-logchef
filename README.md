@@ -2,7 +2,7 @@
 
 A production-oriented Railway template for [Logchef](https://logchef.app/), the open-source log workspace for ClickHouse and VictoriaLogs. It deploys Logchef with local authentication and a private, persistent ClickHouse log store.
 
-> The Deploy on Railway button is added only after the published marketplace route is verified.
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/logchef?referralCode=ZqgrJ0)
 
 ## What this deploys
 
