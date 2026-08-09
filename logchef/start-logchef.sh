@@ -22,10 +22,16 @@ if [ "$max_attempts" -lt 1 ]; then
 fi
 
 while [ "$attempt" -le "$max_attempts" ]; do
-  response="$(wget -q -O - \
-    --header="X-ClickHouse-User: logchef" \
-    --header="X-ClickHouse-Key: ${LOGCHEF_CLICKHOUSE_PASSWORD}" \
-    "$health_url" 2>/dev/null || true)"
+  response="$(curl --fail --silent --show-error --ipv6 \
+    --connect-timeout 2 --max-time 5 \
+    --header "X-ClickHouse-User: logchef" \
+    --header "X-ClickHouse-Key: ${LOGCHEF_CLICKHOUSE_PASSWORD}" \
+    "$health_url" 2>/dev/null || \
+    curl --fail --silent --show-error \
+      --connect-timeout 2 --max-time 5 \
+      --header "X-ClickHouse-User: logchef" \
+      --header "X-ClickHouse-Key: ${LOGCHEF_CLICKHOUSE_PASSWORD}" \
+      "$health_url" 2>/dev/null || true)"
   if [ "$response" = "Ok." ]; then
     exec /usr/local/bin/logchef -config /etc/logchef/railway.toml
   fi
