@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 
+data_dir=/data/logchef
+mkdir -p "$data_dir"
+chown logchef:logchef "$data_dir"
+
 if [ -z "${LOGCHEF_CLICKHOUSE_PASSWORD:-}" ]; then
   echo "LOGCHEF_CLICKHOUSE_PASSWORD must not be empty" >&2
   exit 1
@@ -33,7 +37,8 @@ while [ "$attempt" -le "$max_attempts" ]; do
       --header "X-ClickHouse-Key: ${LOGCHEF_CLICKHOUSE_PASSWORD}" \
       "$health_url" 2>/dev/null || true)"
   if [ "$response" = "Ok." ]; then
-    exec /usr/local/bin/logchef -config /etc/logchef/railway.toml
+    cd "$data_dir"
+    exec su-exec logchef /usr/local/bin/logchef -config /etc/logchef/railway.toml
   fi
   if [ "$attempt" -eq 1 ] || [ $((attempt % 15)) -eq 0 ]; then
     echo "Waiting for ClickHouse readiness (attempt ${attempt}/${max_attempts})"

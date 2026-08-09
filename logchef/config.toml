@@ -9,7 +9,7 @@ frontend_url = ""
 driver = "sqlite"
 
 [sqlite]
-path = "/data/logchef.db"
+path = "/data/logchef/logchef.db"
 
 [auth]
 admin_emails = []

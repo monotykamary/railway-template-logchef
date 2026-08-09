@@ -22,6 +22,12 @@ const clickhouseDockerfile = await read("clickhouse/Dockerfile");
 assert.match(logchefDockerfile, /logchef:v2\.0\.2@sha256:[a-f0-9]{64}/);
 assert.match(clickhouseDockerfile, /clickhouse-server:26\.3\.17\.110@sha256:[a-f0-9]{64}/);
 assert.doesNotMatch(`${logchefDockerfile}\n${clickhouseDockerfile}`, /:latest(?:@|\s|$)/m);
+assert.match(logchefDockerfile, /apk --no-cache add curl su-exec/);
+const logchefConfig = await read("logchef/config.toml");
+const logchefStart = await read("logchef/start-logchef.sh");
+assert.match(logchefConfig, /path = "\/data\/logchef\/logchef\.db"/);
+assert.match(logchefStart, /mkdir -p "\$data_dir"/);
+assert.match(logchefStart, /exec su-exec logchef/);
 
 for (const service of ["logchef", "clickhouse"]) {
   const config = JSON.parse(await read(`${service}/railway.json`));
