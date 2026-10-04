@@ -1,4 +1,4 @@
-FROM ghcr.io/mr-karan/logchef:v2.1.0@sha256:27f631a7a783c7f357efe954d4c9e023f87de10fd6bae51d781235e6c7ec9896
+FROM ghcr.io/mr-karan/logchef:v2.2.0@sha256:b18be3219cd8ca4fa1cef0189ea99ea11492db8a0599326c42efae44e2ae4bd0
 
 USER root
 
