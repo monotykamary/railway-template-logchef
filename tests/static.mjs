@@ -19,8 +19,8 @@ await walk(root);
 
 const logchefDockerfile = await read("logchef/Dockerfile");
 const clickhouseDockerfile = await read("clickhouse/Dockerfile");
-assert.match(logchefDockerfile, /logchef:v2\.2\.0@sha256:[a-f0-9]{64}/);
-assert.match(clickhouseDockerfile, /clickhouse-server:26\.9\.4\.3@sha256:[a-f0-9]{64}/);
+assert.match(logchefDockerfile, /logchef:v2\.3\.2@sha256:[a-f0-9]{64}/);
+assert.match(clickhouseDockerfile, /clickhouse-server:26\.9\.17\.8@sha256:[a-f0-9]{64}/);
 assert.doesNotMatch(`${logchefDockerfile}\n${clickhouseDockerfile}`, /:latest(?:@|\s|$)/m);
 assert.match(logchefDockerfile, /apk --no-cache add curl su-exec/);
 const logchefConfig = await read("logchef/config.toml");
@@ -57,7 +57,7 @@ await readFile(path.join(root, "assets/clickhouse-icon-v263.png"));
 
 const readme = await read("README.md");
 assert.ok(readme.includes("https://railway.com/deploy/logchef?referralCode=ZqgrJ0"));
-for (const marker of ["Logchef v2.2.0", "ClickHouse 26.9.4.3 LTS", "Important limitations", "Post-deploy setup"]) {
+for (const marker of ["Logchef v2.3.2", "ClickHouse 26.9.17.8 LTS", "Important limitations", "Post-deploy setup"]) {
   assert.ok(readme.includes(marker), `README is missing ${marker}`);
 }
 
