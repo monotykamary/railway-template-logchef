@@ -32,7 +32,7 @@ const homepageResponse = await request("/");
 assert.equal(homepageResponse.status, 200);
 const homepage = await homepageResponse.text();
 assert.match(homepage, /<title>[^<]*Logchef/i);
-const assetPath = homepage.match(/(?:src|href)="(\/assets\/[^"]+\.(?:js|css))"/)?.[1];
+const assetPath = homepage.match(/(?:src|href)="\.?(\/assets\/[^"]+\.(?:js|css))"/)?.[1];
 assert.ok(assetPath, "homepage did not reference a built asset");
 assert.equal((await request(assetPath)).status, 200);
 
