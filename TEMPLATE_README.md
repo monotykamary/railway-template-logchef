@@ -19,7 +19,7 @@ The first administrator is created idempotently from `LOGCHEF_AUTH__LOCAL__ADMIN
 
 ## Dependencies for Logchef Hosting
 
-- Logchef v2.4.0
+- Logchef v2.5.0
 - ClickHouse 26.3.17.110 LTS
 - One Railway volume for Logchef metadata
 - One Railway volume for ClickHouse data
@@ -29,7 +29,7 @@ The first administrator is created idempotently from `LOGCHEF_AUTH__LOCAL__ADMIN
 
 - [Logchef documentation](https://logchef.app/)
 - [Logchef source and AGPLv3 license](https://github.com/mr-karan/logchef)
-- [Logchef v2.4.0 release](https://github.com/mr-karan/logchef/releases/tag/v2.4.0)
+- [Logchef v2.5.0 release](https://github.com/mr-karan/logchef/releases/tag/v2.5.0)
 - [ClickHouse documentation](https://clickhouse.com/docs)
 - [Template source repository](https://github.com/monotykamary/railway-template-logchef)
 

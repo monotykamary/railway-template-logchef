@@ -8,7 +8,7 @@ A production-oriented Railway template for [Logchef](https://logchef.app/), the 
 
 | Service | Version | Exposure | Persistence |
 | --- | --- | --- | --- |
-| Logchef | Logchef v2.4.0 | Public HTTPS on port `8125` | SQLite metadata at `/data` |
+| Logchef | Logchef v2.5.0 | Public HTTPS on port `8125` | SQLite metadata at `/data` |
 | ClickHouse | ClickHouse 26.9.21.9 LTS | Private ports `8123` and `9000` | Data at `/var/lib/clickhouse` |
 
 Both images are pinned by release and registry digest. The template provisions a `Railway ClickHouse` datasource and a 30-day OpenTelemetry-style `default.logs` table. ClickHouse is intentionally private.
@@ -79,7 +79,7 @@ The smoke test builds both pinned wrappers, checks health and static assets, ver
 
 - [Logchef source](https://github.com/mr-karan/logchef)
 - [Logchef documentation](https://logchef.app/)
-- [Logchef v2.4.0](https://github.com/mr-karan/logchef/releases/tag/v2.4.0)
+- [Logchef v2.5.0](https://github.com/mr-karan/logchef/releases/tag/v2.5.0)
 - [ClickHouse source](https://github.com/ClickHouse/ClickHouse)
 - [ClickHouse 26.9.21.9 LTS](https://github.com/ClickHouse/ClickHouse/releases)
 
