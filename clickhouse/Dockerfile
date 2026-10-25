@@ -1,4 +1,4 @@
-FROM clickhouse/clickhouse-server:26.9.21.9@sha256:fd4652f708ecfc2239d08c828f5a51dfcc92a1e4a57269b1837c4dbe2dbe33a2
+FROM clickhouse/clickhouse-server:26.10.2.103@sha256:b2bfa4d8399ee9973868cc5c1754cb506a6f4b86fbddc41010cc090beb55c85e
 
 COPY init.sql /docker-entrypoint-initdb.d/001-logchef.sql
 
