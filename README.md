@@ -8,8 +8,8 @@ A production-oriented Railway template for [Logchef](https://logchef.app/), the 
 
 | Service | Version | Exposure | Persistence |
 | --- | --- | --- | --- |
-| Logchef | Logchef v2.5.0 | Public HTTPS on port `8125` | SQLite metadata at `/data` |
-| ClickHouse | ClickHouse 26.10.2.103 LTS | Private ports `8123` and `9000` | Data at `/var/lib/clickhouse` |
+| Logchef | Logchef v2.7.0 | Public HTTPS on port `8125` | SQLite metadata at `/data` |
+| ClickHouse | ClickHouse 26.10.2.103 | Private ports `8123` and `9000` | Data at `/var/lib/clickhouse` |
 
 Both images are pinned by release and registry digest. The template provisions a `Railway ClickHouse` datasource and a 30-day OpenTelemetry-style `default.logs` table. ClickHouse is intentionally private.
 
@@ -79,8 +79,14 @@ The smoke test builds both pinned wrappers, checks health and static assets, ver
 
 - [Logchef source](https://github.com/mr-karan/logchef)
 - [Logchef documentation](https://logchef.app/)
-- [Logchef v2.5.0](https://github.com/mr-karan/logchef/releases/tag/v2.5.0)
+- [Logchef v2.7.0](https://github.com/mr-karan/logchef/releases/tag/v2.7.0)
 - [ClickHouse source](https://github.com/ClickHouse/ClickHouse)
-- [ClickHouse 26.10.2.103 LTS](https://github.com/ClickHouse/ClickHouse/releases)
+- [ClickHouse 26.10.2.103](https://github.com/ClickHouse/ClickHouse/releases)
 
 This repository preserves Logchef's GNU AGPLv3 license and attribution. See [`LICENSE`](LICENSE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+## Upgrading from v2.5 / v2.6 to v2.7
+
+Back up the metadata database before upgrading. On the included SQLite store, v2.7 automatically runs migrations 000039–000041 at startup. They add dashboard revisions, classify collection links as pins/managed links, and fill dashboard summary columns. Keep the existing `/data` volume, encryption/authentication secrets and ClickHouse volume intact; this template does not change the ClickHouse image or storage schema.
+
+Save open dashboard edits before the update and reload browser tabs afterwards. Dashboard API clients must send the current `revision` on saves (missing: 428; stale: 409). Schema-2 dashboards need the documented `X-Logchef-Dashboard-Schema` and feature headers. Existing collection links may lose delegated edit rights according to the upstream migration rule; review **Library → All queries → Links that lost delegation**. See the [v2.7 upgrade notes](https://github.com/mr-karan/logchef/blob/v2.7.0/CHANGELOG.md) for the preflight report query and alert/query compatibility changes.
