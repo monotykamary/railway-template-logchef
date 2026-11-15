@@ -31,7 +31,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == '/api/v1/admin/sources':
             return self.respond(200, [{'id': 1, 'name': 'Railway ClickHouse', 'is_connected': True}])
         if self.path == '/api/v1/admin/teams':
-            return self.respond(200, [{'id': 3, 'name': 'Railway validation ' + marker}] if model['team'] else [])
+            return self.respond(200, [{'id': 3, 'name': model['team_name']}] if model['team'] else [])
         if self.path.endswith('/members'):
             return self.respond(200, [{'user_id': 2, 'role': 'admin'}] if model['member'] else [])
         if self.path.endswith('/sources'):
@@ -46,6 +46,9 @@ class Handler(BaseHTTPRequestHandler):
         if 'session_id=fixture-only' not in self.headers.get('Cookie', ''):
             return self.respond(401, {})
         if self.path == '/api/v1/admin/teams':
+            if not 2 <= len(body.get('name', '').encode()) <= 50:
+                return self.respond(400, {})
+            model['team_name'] = body['name']
             model['team'] = True
             return self.respond(201, {'id': 3})
         if self.path.endswith('/members'):
@@ -79,6 +82,9 @@ try:
         model['team'] = False
         run('upgrade', False)
         model['team'] = True
+        model['member'] = False
+        run('upgrade', False)
+        model['member'] = True
         for path in Path(td).iterdir():
             path.unlink()
         run('upgrade', False)

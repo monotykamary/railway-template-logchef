@@ -85,7 +85,8 @@ if STATE.exists():
     require(seed['marker'] == MARKER, 'marker does not match persisted test state')
 else:
     require(PHASE == 'boot', 'missing persisted test state; refusing to reseed after boot')
-    name = 'Railway validation ' + MARKER
+    # Upstream team names are limited to 50 bytes; retain a stable short suffix.
+    name = 'Railway validation ' + hashlib.sha256(MARKER.encode()).hexdigest()[:12]
     teams = data('/api/v1/admin/teams')
     team = next((x for x in teams if x['name'] == name), None)
     if team is None:
